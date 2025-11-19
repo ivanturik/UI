@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>АИС "Обучение на курсах" - SPA Прототип</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><i class="fas fa-graduation-cap"></i> АИС "Обучение на курсах"</h1>
+            <nav class="nav" aria-label="Главное меню">
+                <ul>
+                    <li><a class="nav-btn" href="#welcome"><i class="fas fa-home"></i> Каталог</a></li>
+                    <li><a class="nav-btn" href="#assignments"><i class="fas fa-tasks"></i> Задания</a></li>
+                    <li><a class="nav-btn" href="#profile"><i class="fas fa-user"></i> Профиль</a></li>
+                    <li><a class="nav-btn" href="#admin-list" id="admin-btn"><i class="fas fa-cog"></i> Админ</a></li>
+                    <li><a class="nav-btn" href="#login"><i class="fas fa-sign-in-alt"></i> Войти</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <!-- WELCOME -->
+        <section id="welcome" class="page" aria-labelledby="welcome-title">
+            <div class="container">
+                <h2 id="welcome-title">Добро пожаловать в АИС "Обучение на курсах"</h2>
+                <p>Ваша система дистанционного обучения. Для начала работы выберите действие:</p>
+                <div class="actions">
+                    <a href="#login" class="submit-btn">Авторизация</a>
+                    <a href="#register" class="submit-btn">Регистрация</a>
+                    <a href="#home" class="nav-btn">Посмотреть курсы (Каталог)</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOME / CATALOG -->
+        <section id="home" class="page" aria-labelledby="home-title">
+            <div class="container">
+                <h2 id="home-title">Каталог доступных дисциплин</h2>
+                <p>Выберите интересующую дисциплину для записи.</p>
+
+                <div class="filters">
+                    <label for="discipline-filter">Фильтр по дисциплине:</label>
+                    <select id="discipline-filter" aria-label="Фильтр дисциплин">
+                        <option>Все</option>
+                        <option>Математика</option>
+                        <option>Программирование</option>
+                        <option>Физика</option>
+                    </select>
+                    <button class="filter-btn" aria-label="Поиск по дисциплинам"><i class="fas fa-search"></i> Поиск</button>
+                    <button class="sort-btn" aria-label="Сортировка по длительности">Сортировка по длительности <i class="fas fa-sort"></i></button>
+                </div>
+
+                <ul class="list" aria-live="polite">
+                    <li>
+                        Дисциплина: <strong>Математика</strong> (3 группы, макс. 10 студентов, 30 часов) →
+                        <a href="#enroll" class="wireframe-link">Записаться и оплатить</a>
+                    </li>
+                    <li>
+                        Дисциплина: <strong>Программирование</strong> (5 групп, макс. 10 студентов, 50 часов) →
+                        <a href="#enroll" class="wireframe-link">Записаться и оплатить</a>
+                    </li>
+                    <li>
+                        Дисциплина: <strong>Физика</strong> (2 группы, макс. 10 студентов, 40 часов) →
+                        <a href="#enroll" class="wireframe-link">Записаться и оплатить</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ENROLL -->
+        <section id="enroll" class="page" aria-labelledby="enroll-title">
+            <div class="container">
+                <h2 id="enroll-title">Запись на дисциплину</h2>
+                <form class="form" aria-label="Форма записи">
+                    <label for="selected-discipline">Выбранная дисциплина:</label>
+                    <select id="selected-discipline" disabled>
+                        <option>Математика (Группа 1)</option>
+                    </select>
+                    <label for="group-select">Выберите группу:</label>
+                    <select id="group-select">
+                        <option>Группа 1 (8/10 мест)</option>
+                        <option>Группа 2 (5/10 мест)</option>
+                    </select>
+                    <label for="payment-amount">Сумма оплаты:</label>
+                    <input type="number" id="payment-amount" value="850" readonly>
+                    <a href="#profile" class="submit-btn">Записаться и оплатить</a>
+                    <a href="#home" class="nav-btn">Назад к каталогу</a>
+                </form>
+            </div>
+        </section>
+
+        <!-- LOGIN -->
+        <section id="login" class="page" aria-labelledby="login-title">
+            <div class="container">
+                <h2 id="login-title">Авторизация</h2>
+                <form class="form">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" required>
+
+                    <a href="#profile" class="submit-btn">Войти</a>
+                    <a href="#register" class="nav-btn">Нет аккаунта? Зарегистрироваться</a>
+                </form>
+                <p>Для каталога дисциплин <a href="#home" class="wireframe-link">→ перейдите в меню</a>.</p>
+            </div>
+        </section>
+
+        <!-- REGISTER -->
+        <section id="register" class="page" aria-labelledby="register-title">
+            <div class="container">
+                <h2 id="register-title">Полная регистрация</h2>
+                <form class="form">
+                    <label for="reg-name">Имя:</label>
+                    <input type="text" id="reg-name" required>
+                    <label for="reg-surname">Фамилия:</label>
+                    <input type="text" id="reg-surname" required>
+                    <label for="reg-email">Email:</label>
+                    <input type="email" id="reg-email" required>
+
+                    <label for="reg-password">Пароль:</label>
+                    <input type="password" id="reg-password" required>
+
+                    <label for="reg-role">Роль:</label>
+                    <select id="reg-role">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                    <a href="#profile" class="submit-btn">Зарегистрироваться</a>
+                    <a href="#login" class="nav-btn">Уже есть аккаунт?</a>
+                </form>
+                <p>Для каталога дисциплин <a href="#home" class="wireframe-link">→ перейдите в меню</a>.</p>
+            </div>
+        </section>
+
+        <!-- PROFILE -->
+        <section id="profile" class="page" aria-labelledby="profile-title">
+            <div class="container">
+                <h2 id="profile-title">Личный кабинет</h2>
+                <div class="profile-info">
+                    <h3>Персональные данные</h3>
+                    <p>Имя: <strong>Иван Иванов</strong></p>
+                    <p>Роль: <strong>Студент</strong></p>
+                    <p>E-mail: ivan.ivanov@mail.com</p>
+                    <a href="#profile-edit" class="action-btn">Редактировать профиль</a>
+                </div>
+                <div class="profile-stats">
+                    <h3>Мой прогресс</h3>
+                    <p>Текущая дисциплина: <strong>Математика (Группа 1)</strong></p>
+                    <p>Начальный уровень: <strong>8/10</strong></p>
+                    <p>Бонусные баллы: <strong>+5</strong></p>
+                    <p>Скидка на следующий курс: <strong>15%</strong></p>
+                    <a href="#assignments" class="nav-btn">Перейти к моим заданиям</a>
+                    <a href="#home" class="nav-btn">К каталогу дисциплин</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASSIGNMENTS -->
+        <section id="assignments" class="page" aria-labelledby="assignments-title">
+            <div class="container">
+                <h2 id="assignments-title">Задания</h2>
+                <p>Ваши задания. Для каталога дисциплин — переход через меню.</p>
+                <div class="filters">
+                    <label for="status-filter">Фильтр по статусу:</label>
+                    <select id="status-filter">
+                        <option>Все</option>
+                        <option>В работе</option>
+                        <option>На проверке</option>
+                        <option>Проверено</option>
+                    </select>
+                    <button class="filter-btn"><i class="fas fa-search"></i> Поиск</button>
+                    <button class="sort-btn">Сортировка по сроку <i class="fas fa-sort"></i></button>
+                </div>
+                <ul class="list">
+                    <li>
+                        Задание 1: Решить уравнение (Срок: <strong>2025-11-19</strong>) →
+                        <a href="#add-assignment" class="wireframe-link">Загрузить работу</a> |
+                        <button class="action-btn">Продлить срок</button>
+                    </li>
+                    <li>
+                        Задание 2: Python код (Статус: <strong>Проверено, 8/10</strong>) →
+                        <a href="#result" class="wireframe-link">Просмотр оценки</a>
+                    </li>
+                </ul>
+                <a href="#add-assignment" class="add-btn teacher-only">
+                    <i class="fas fa-plus"></i> Добавить задание (Только для Teacher)
+                </a>
+            </div>
+        </section>
+
+        <!-- ADD / EDIT ASSIGNMENT -->
+        <section id="add-assignment" class="page" aria-labelledby="add-assignment-title">
+            <div class="container">
+                <h2 id="add-assignment-title">Добавить / Редактировать задание</h2>
+                <form class="form">
+                    <label for="title">Название задания:</label>
+                    <input type="text" id="title" required>
+                    <label for="description">Описание:</label>
+                    <textarea id="description" required></textarea>
+                    <label for="deadline">Срок сдачи:</label>
+                    <input type="date" id="deadline" value="2025-11-19" required>
+                    <label for="discipline">Дисциплина:</label>
+                    <select id="discipline">
+                        <option>Математика</option>
+                        <option>Программирование</option>
+                    </select>
+                    <a href="#assignments" class="submit-btn">Сохранить</a>
+                    <a href="#assignments" class="nav-btn">Назад</a>
+                </form>
+                <p>Для каталога <a href="#home" class="wireframe-link">→ перейдите в меню</a>.</p>
+            </div>
+        </section>
+
+        <!-- RESULT -->
+        <section id="result" class="page" aria-labelledby="result-title">
+            <div class="container">
+                <h2 id="result-title">Просмотр / Редактирование результата</h2>
+                <form class="form">
+                    <h3>Задание: Python код</h3>
+                    <label>Статус:</label>
+                    <p class="data-view"><strong>Проверено</strong></p>
+
+                    <label for="score">Оценка:</label>
+                    <input type="number" id="score" value="8" min="0" max="10">
+                    <label for="comment">Комментарий преподавателя:</label>
+                    <textarea id="comment">Отличное начало! Проверьте обработку ошибок.</textarea>
+
+                    <label>Начисленные бонусные баллы:</label>
+                    <input type="number" value="2" min="0">
+                    <a href="#assignments" class="submit-btn">Сохранить изменения</a>
+                    <a href="#assignments" class="nav-btn">Назад к заданиям</a>
+                </form>
+                <p>Для каталога <a href="#home" class="wireframe-link">→ перейдите в меню</a>.</p>
+            </div>
+        </section>
+
+        <!-- ADMIN LIST -->
+        <section id="admin-list" class="page" aria-labelledby="admin-list-title">
+            <div class="container">
+                <h2 id="admin-list-title">Админ-панель: управление пользователями</h2>
+
+                <div class="filters admin-filters">
+                    <label for="user-search">Поиск пользователя:</label>
+                    <input id="user-search" placeholder="Имя, email..." />
+
+                    <label for="role-filter">Роль:</label>
+                    <select id="role-filter">
+                        <option value="">Все</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    <label for="user-sort">Сортировка:</label>
+                    <select id="user-sort">
+                        <option>По имени (А→Я)</option>
+                        <option>По роли</option>
+                    </select>
+
+                    <a href="#admin-add" class="add-btn"><i class="fas fa-user-plus"></i> Добавить пользователя</a>
+                </div>
+
+                <ul class="list admin-list" aria-live="polite">
+                    <li class="user-row">
+                        Student: <strong>Иван Иванов</strong> (ivan.ivanov@mail.com, Группа 1) →
+                        <a href="#admin-edit?user=ivan" class="action-btn">Редактировать</a>
+                        <a href="#admin-delete?user=ivan" class="action-btn delete-btn">Удалить</a>
+                    </li>
+                    <li class="user-row">
+                        Teacher: <strong>Пётр Петров</strong> (p.petrov@mail.com) →
+                        <a href="#admin-edit?user=petrov" class="action-btn">Редактировать</a>
+                        <a href="#admin-delete?user=petrov" class="action-btn delete-btn">Удалить</a>
+                    </li>
+                </ul>
+
+                <div class="pagination">
+                    <button class="nav-btn">Предыдущая</button>
+                    <button class="nav-btn">Следующая</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN ADD -->
+        <section id="admin-add" class="page" aria-labelledby="admin-add-title">
+            <div class="container">
+                <h2 id="admin-add-title">Админ: Добавить пользователя</h2>
+                <form class="form">
+                    <label for="user-name">Имя пользователя:</label>
+                    <input type="text" id="user-name" required>
+
+                    <label for="user-email">Email:</label>
+                    <input type="email" id="user-email" required>
+
+                    <label for="user-role">Роль:</label>
+                    <select id="user-role">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    <label for="user-discipline">Дисциплина (для Teacher):</label>
+                    <select id="user-discipline">
+                        <option>—</option>
+                        <option>Математика</option>
+                        <option>Программирование</option>
+                        <option>Физика</option>
+                    </select>
+
+                    <label for="group">Группа (для Student):</label>
+                    <input type="text" id="group" placeholder="Группа 1">
+
+                    <a href="#admin-list" class="submit-btn">Добавить пользователя</a>
+                    <a href="#admin-list" class="nav-btn">Отмена</a>
+                </form>
+            </div>
+        </section>
+
+        <!-- ADMIN EDIT -->
+        <section id="admin-edit" class="page" aria-labelledby="admin-edit-title">
+            <div class="container">
+                <h2 id="admin-edit-title">Админ: Редактировать пользователя</h2>
+                <form class="form">
+                    <label for="edit-user-name">Имя пользователя:</label>
+                    <input type="text" id="edit-user-name" value="Иван Иванов">
+
+                    <label for="edit-user-email">Email:</label>
+                    <input type="email" id="edit-user-email" value="ivan.ivanov@mail.com">
+
+                    <label for="edit-user-role">Роль:</label>
+                    <select id="edit-user-role">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    <label for="edit-user-discipline">Дисциплина (для Teacher):</label>
+                    <select id="edit-user-discipline">
+                        <option>—</option>
+                        <option>Математика</option>
+                        <option>Программирование</option>
+                        <option>Физика</option>
+                    </select>
+
+                    <label for="edit-group">Группа (для Student):</label>
+                    <input type="text" id="edit-group" placeholder="Группа 1">
+
+                    <a href="#admin-list" class="submit-btn">Сохранить изменения</a>
+                    <a href="#admin-list" class="nav-btn">Отмена</a>
+                </form>
+            </div>
+        </section>
+
+        <!-- ADMIN DELETE -->
+        <section id="admin-delete" class="page" aria-labelledby="admin-delete-title">
+            <div class="container">
+                <h2 id="admin-delete-title">Подтверждение удаления</h2>
+                <p>Вы действительно хотите удалить пользователя <strong>Иван Иванов</strong> (ivan.ivanov@mail.com)?</p>
+                <div class="actions">
+                    <a href="#admin-list" class="action-btn delete-btn">Да, удалить</a>
+                    <a href="#admin-list" class="nav-btn">Отмена</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ERROR -->
+        <section id="error" class="page" aria-labelledby="error-title">
+            <div class="container">
+                <h2 id="error-title">Ошибка 404 — Страница не найдена</h2>
+                <p>Проверьте адрес или вернитесь на главную.</p>
+                <a href="#home" class="nav-btn"><i class="fas fa-arrow-left"></i> На главную</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 АИС "Обучение на курсах". Контакты: support@learning.ru</p>
+        </div>
+    </footer>
+</body>
+</html>
