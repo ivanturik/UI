@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <script src="script.js" defer></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>АИС "Обучение на курсах" - SPA Прототип</title>
@@ -180,22 +181,17 @@
                     <button class="filter-btn"><i class="fas fa-search"></i> Поиск</button>
                     <button class="sort-btn">Сортировка по сроку <i class="fas fa-sort"></i></button>
                 </div>
-                <ul class="list">
-                    <li>
-                        Задание 1: Решить уравнение (Срок: <strong>2025-11-19</strong>) →
-                        <a href="#add-assignment" class="wireframe-link">Загрузить работу</a> |
-                        <button class="action-btn">Продлить срок</button>
-                    </li>
-                    <li>
-                        Задание 2: Python код (Статус: <strong>Проверено, 8/10</strong>) →
-                        <a href="#result" class="wireframe-link">Просмотр оценки</a>
-                    </li>
+
+                <ul class="list" id="assignments-list" aria-live="polite">
+                    <!-- Здесь JS будет отрисовывать задания -->
                 </ul>
+
                 <a href="#add-assignment" class="add-btn teacher-only">
                     <i class="fas fa-plus"></i> Добавить задание (Только для Teacher)
                 </a>
             </div>
         </section>
+
 
         <!-- ADD / EDIT ASSIGNMENT -->
         <section id="add-assignment" class="page" aria-labelledby="add-assignment-title">
