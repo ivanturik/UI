@@ -153,6 +153,34 @@ button:hover,
   padding: 1rem 0;
   margin-top: 2rem;
 }
+/* ==== Лаба 7: авторизация и роли ==== */
+
+.auth-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.auth-panel .current-user-name {
+  font-weight: 600;
+}
+
+.auth-panel .btn {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+/* По умолчанию можно спрятать admin-only, JS покажет при необходимости */
+.admin-only {
+  display: none;
+}
+
+/* Кнопку "Выйти" по умолчанию тоже спрячем — JS покажет для залогиненных */
+#logout-btn {
+  display: none;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -167,4 +195,4 @@ button:hover,
   .action-btn,
   .add-btn { width: 100%; min-width: auto; }
 }
-lis
+
