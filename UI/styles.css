@@ -181,6 +181,12 @@ button:hover,
   display: none;
 }
 
+.hint {
+  color: #9ad1ff;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
