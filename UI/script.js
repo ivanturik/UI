@@ -164,6 +164,7 @@ const assignmentsModel = new PostList(restoreAssignments());
 let assignments = assignmentsModel.items;
 let currentUser = restoreCurrentUser();
 let statusFilter = 'Все';
+let catalogSelectedId = '';
 let assignmentsVisibleCount = 10;
 
 recalculateCourseCompletions();
@@ -524,7 +525,7 @@ function renderCatalog() {
   const filterSelect = document.getElementById('discipline-filter');
   if (!list || !filterSelect) return;
 
-  const previousSelection = filterSelect.value;
+  const previousSelection = filterSelect.value || catalogSelectedId;
   filterSelect.innerHTML = '';
   const allOption = document.createElement('option');
   allOption.value = '';
@@ -540,10 +541,8 @@ function renderCatalog() {
 
   if (previousSelection) {
     filterSelect.value = previousSelection;
-    if (!filterSelect.value) {
-      filterSelect.value = '';
-    }
   }
+  catalogSelectedId = filterSelect.value || '';
 
   const selectedId = filterSelect.value;
   list.innerHTML = '';
