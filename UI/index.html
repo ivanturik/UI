@@ -52,32 +52,13 @@
             <div class="container">
                 <h2 id="home-title">Каталог доступных дисциплин</h2>
                 <p>Выберите интересующую дисциплину для записи.</p>
-                <div class="filters">
+                <form class="filters" id="catalog-filter-form">
                     <label for="discipline-filter">Фильтр по дисциплине:</label>
-                    <select id="discipline-filter" aria-label="Фильтр дисциплин">
-                    <option>Все</option>
-                    <option>Математика</option>
-                    <option>Программирование</option>
-                    <option>Физика</option>
-                    </select>
-                    <button class="filter-btn" aria-label="Поиск по дисциплинам"><i class="fas fa-search"></i> Поиск</button>
-                    <button class="sort-btn" aria-label="Сортировка по длительности">Сортировка по длительности <i class="fas fa-sort"></i></button>
-                </div>
+                    <select id="discipline-filter" aria-label="Фильтр дисциплин"></select>
+                    <button type="submit" class="filter-btn" aria-label="Поиск по дисциплинам"><i class="fas fa-search"></i> Поиск</button>
+                </form>
 
-                <ul class="list" aria-live="polite">
-                    <li>
-                        Дисциплина: <strong>Математика</strong> (3 группы, макс. 10 студентов, 30 часов) →
-                        <a href="#profile" class="submit-btn student-only">Записаться и оплатить</a>
-                    </li>
-                    <li>
-                        Дисциплина: <strong>Программирование</strong> (5 групп, макс. 10 студентов, 50 часов) →
-                        <a href="#profile" class="submit-btn student-only">Записаться и оплатить</a>
-                    </li>
-                    <li>
-                        Дисциплина: <strong>Физика</strong> (2 группы, макс. 10 студентов, 40 часов) →
-                        <a href="#profile" class="submit-btn student-only">Записаться и оплатить</a>
-                    </li>
-                </ul>
+                <ul class="list" id="catalog-list" aria-live="polite"></ul>
             </div>
         </section>
 
@@ -85,19 +66,15 @@
         <section id="enroll" class="page" aria-labelledby="enroll-title">
             <div class="container">
                 <h2 id="enroll-title">Запись на дисциплину</h2>
-                <form class="form" aria-label="Форма записи">
+                <form class="form" id="enroll-form" aria-label="Форма записи">
                     <label for="selected-discipline">Выбранная дисциплина:</label>
-                    <select id="selected-discipline" disabled>
-                        <option>Математика (Группа 1)</option>
-                    </select>
+                    <select id="selected-discipline"></select>
                     <label for="group-select">Выберите группу:</label>
-                    <select id="group-select">
-                        <option>Группа 1 (8/10 мест)</option>
-                        <option>Группа 2 (5/10 мест)</option>
-                    </select>
-                    <label for="payment-amount">Сумма оплаты:</label>
-                    <input type="number" id="payment-amount" value="850" readonly>
-                    <a href="#profile" class="submit-btn student-only">Записаться и оплатить</a>
+                    <select id="group-select"></select>
+                    <label for="payment-amount">Сумма к оплате (с учетом скидки):</label>
+                    <input type="number" id="payment-amount" value="0" readonly>
+                    <p id="discount-hint" class="hint"></p>
+                    <button type="submit" class="submit-btn student-only">Записаться и оплатить</button>
                     <a href="#home" class="nav-btn">Назад к каталогу</a>
                 </form>
             </div>
@@ -125,8 +102,9 @@
         <section id="register" class="page" aria-labelledby="register-title">
             <div class="container">
                 <h2 id="register-title">Полная регистрация</h2>
-                <!-- Макет, без JS-логики регистрации -->
-                <form class="form">
+                <form class="form" id="register-form">
+                    <label for="reg-login">Логин:</label>
+                    <input type="text" id="reg-login" required>
                     <label for="reg-name">Имя:</label>
                     <input type="text" id="reg-name" required>
                     <label for="reg-surname">Фамилия:</label>
@@ -142,7 +120,7 @@
                         <option value="student">Student</option>
                         <option value="teacher">Teacher</option>
                     </select>
-                    <a href="#profile" class="submit-btn">Зарегистрироваться</a>
+                    <button type="submit" class="submit-btn">Зарегистрироваться</button>
                     <a href="#login" class="nav-btn">Уже есть аккаунт?</a>
                 </form>
                 <p>Для каталога дисциплин <a href="#home" class="wireframe-link">→ перейдите в меню</a>.</p>
@@ -155,18 +133,27 @@
             <h2 id="profile-title">Личный кабинет</h2>
             <div class="profile-info">
             <h3>Персональные данные</h3>
-            <p>Имя: <strong id="profile-name">Иван Иванов</strong></p>
-            <p>Роль: <strong id="profile-role">Студент</strong></p>
-            <p>E-mail: <span id="profile-email">ivan.ivanov@mail.com</span></p>
+            <p>Имя: <strong id="profile-name"></strong></p>
+            <p>Роль: <strong id="profile-role"></strong></p>
+            <p>E-mail: <span id="profile-email"></span></p>
             <a href="#profile-edit" class="action-btn">Редактировать профиль</a>
             </div>
             <div class="profile-stats">
             <h3>Мой прогресс</h3>
-            <p>Текущая дисциплина: <strong>Математика (Группа 1)</strong></p>
-            <p>Начальный уровень: <strong>8/10</strong></p>
-            <p>Бонусные баллы: <strong>+5</strong></p>
-            <p>Скидка на следующий курс: <strong>15%</strong></p>
-            <a href="#assignments" class="nav-btn">Перейти к моим заданиям</a>
+            <div id="student-progress" class="role-block">
+                <p>Текущая дисциплина: <strong id="profile-discipline">—</strong></p>
+                <p>Начальный уровень: <strong id="profile-level">—</strong></p>
+                <p>Бонусные баллы: <strong id="profile-bonus">—</strong></p>
+                <p>Скидка на следующий курс: <strong id="profile-discount">—</strong></p>
+                <a href="#assignments" class="nav-btn">Перейти к моим заданиям</a>
+            </div>
+            <div id="teacher-progress" class="role-block teacher-only">
+                <p>Мои группы и студенты:</p>
+                <ul id="teacher-groups" class="list"></ul>
+            </div>
+            <div id="admin-progress" class="role-block admin-only">
+                <p>Сотрудник может создавать дисциплины, группы и управлять пользователями в административном разделе.</p>
+            </div>
             <a href="#home" class="nav-btn">К каталогу дисциплин</a>
             </div>
         </div>
@@ -179,13 +166,13 @@
             <h2 id="profile-edit-title">Редактирование профиля</h2>
             <form class="form" id="profile-edit-form">
             <label for="edit-name">Имя:</label>
-            <input type="text" id="edit-name" name="firstName" value="Иван">
+            <input type="text" id="edit-name" name="firstName" value="">
 
             <label for="edit-surname">Фамилия:</label>
-            <input type="text" id="edit-surname" name="lastName" value="Иванов">
+            <input type="text" id="edit-surname" name="lastName" value="">
 
             <label for="edit-email">Email:</label>
-            <input type="email" id="edit-email" name="email" value="ivan.ivanov@mail.com">
+            <input type="email" id="edit-email" name="email" value="">
 
             <button type="submit" class="submit-btn">Сохранить</button>
             <a href="#profile" class="nav-btn">Отмена</a>
@@ -223,7 +210,7 @@
                 </ul>
 
                 <a href="#add-assignment" class="add-btn teacher-only">
-                    <i class="fas fa-plus"></i> Добавить задание (Только для Teacher)
+                    <i class="fas fa-plus"></i> Добавить задание
                 </a>
             </div>
         </section>
@@ -243,11 +230,10 @@
                     <input type="date" id="add-deadline" name="deadline" required>
 
                     <label for="add-discipline">Дисциплина:</label>
-                    <select id="add-discipline" name="discipline" required>
-                        <option>Математика</option>
-                        <option>Программирование</option>
-                        <option>Физика</option>
-                    </select>
+                    <select id="add-discipline" name="discipline" required></select>
+
+                    <label for="add-group">Группа:</label>
+                    <select id="add-group" name="group" required></select>
 
                     <button type="submit" class="submit-btn teacher-only">Сохранить задание</button>
                     <a href="#assignments" class="nav-btn">Назад</a>
@@ -272,7 +258,7 @@
 
                     <label>Начисленные бонусные баллы:</label>
                     <input type="number" value="2" min="0">
-                    <a href="#assignments" class="submit-btn">Сохранить изменения</a>
+                    <button type="submit" class="submit-btn">Сохранить изменения</button>
                     <a href="#assignments" class="nav-btn">Назад к заданиям</a>
                 </form>
                 <p>Для каталога <a href="#home" class="wireframe-link">→ перейдите в меню</a>.</p>
@@ -298,30 +284,15 @@
 
                     <label for="user-sort">Сортировка:</label>
                     <select id="user-sort">
-                        <option>По имени (А→Я)</option>
-                        <option>По роли</option>
+                        <option value="name">По имени (А→Я)</option>
+                        <option value="role">По роли</option>
                     </select>
 
                     <a href="#admin-add" class="add-btn"><i class="fas fa-user-plus"></i> Добавить пользователя</a>
+                    <a href="#admin-courses" class="add-btn"><i class="fas fa-book"></i> Добавить дисциплину</a>
                 </div>
 
-                <ul class="list admin-list" aria-live="polite">
-                    <li class="user-row">
-                        Student: <strong>Иван Иванов</strong> (ivan.ivanov@mail.com, Группа 1) →
-                        <a href="#admin-edit?user=ivan" class="action-btn">Редактировать</a>
-                        <a href="#admin-delete?user=ivan" class="action-btn delete-btn">Удалить</a>
-                    </li>
-                    <li class="user-row">
-                        Teacher: <strong>Пётр Петров</strong> (p.petrov@mail.com) →
-                        <a href="#admin-edit?user=petrov" class="action-btn">Редактировать</a>
-                        <a href="#admin-delete?user=petrov" class="action-btn delete-btn">Удалить</a>
-                    </li>
-                </ul>
-
-                <div class="pagination">
-                    <button class="nav-btn">Предыдущая</button>
-                    <button class="nav-btn">Следующая</button>
-                </div>
+                <ul class="list admin-list" id="admin-users" aria-live="polite"></ul>
             </div>
         </section>
 
@@ -329,7 +300,13 @@
         <section id="admin-add" class="page admin-only" aria-labelledby="admin-add-title">
             <div class="container">
                 <h2 id="admin-add-title">Админ: Добавить пользователя</h2>
-                <form class="form">
+                <form class="form" id="admin-add-form">
+                    <label for="user-login">Логин:</label>
+                    <input type="text" id="user-login" required>
+
+                    <label for="user-password">Пароль:</label>
+                    <input type="password" id="user-password" required>
+
                     <label for="user-name">Имя пользователя:</label>
                     <input type="text" id="user-name" required>
 
@@ -344,66 +321,39 @@
                     </select>
 
                     <label for="user-discipline">Дисциплина (для Teacher):</label>
-                    <select id="user-discipline">
-                        <option>—</option>
-                        <option>Математика</option>
-                        <option>Программирование</option>
-                        <option>Физика</option>
-                    </select>
+                    <select id="user-discipline"></select>
 
                     <label for="group">Группа (для Student):</label>
-                    <input type="text" id="group" placeholder="Группа 1">
+                    <select id="group"></select>
 
-                    <a href="#admin-list" class="submit-btn">Добавить пользователя</a>
+                    <button type="submit" class="submit-btn">Добавить пользователя</button>
                     <a href="#admin-list" class="nav-btn">Отмена</a>
                 </form>
             </div>
         </section>
 
-        <!-- ADMIN EDIT -->
-        <section id="admin-edit" class="page admin-only" aria-labelledby="admin-edit-title">
+        <section id="admin-courses" class="page admin-only" aria-labelledby="admin-courses-title">
             <div class="container">
-                <h2 id="admin-edit-title">Админ: Редактировать пользователя</h2>
-                <form class="form">
-                    <label for="edit-user-name">Имя пользователя:</label>
-                    <input type="text" id="edit-user-name" value="Иван Иванов">
+                <h2 id="admin-courses-title">Админ: Добавить дисциплину</h2>
+                <form class="form" id="admin-course-form">
+                    <label for="course-title">Название дисциплины:</label>
+                    <input type="text" id="course-title" required>
 
-                    <label for="edit-user-email">Email:</label>
-                    <input type="email" id="edit-user-email" value="ivan.ivanov@mail.com">
+                    <label for="course-hours">Трудоёмкость (часов):</label>
+                    <input type="number" id="course-hours" min="1" value="30" required>
 
-                    <label for="edit-user-role">Роль:</label>
-                    <select id="edit-user-role">
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                    <label for="course-price">Стоимость:</label>
+                    <input type="number" id="course-price" min="0" value="1000" required>
 
-                    <label for="edit-user-discipline">Дисциплина (для Teacher):</label>
-                    <select id="edit-user-discipline">
-                        <option>—</option>
-                        <option>Математика</option>
-                        <option>Программирование</option>
-                        <option>Физика</option>
-                    </select>
+                    <label for="course-group">Название первой группы:</label>
+                    <input type="text" id="course-group" value="Группа 1" required>
 
-                    <label for="edit-group">Группа (для Student):</label>
-                    <input type="text" id="edit-group" placeholder="Группа 1">
+                    <label for="course-teacher">Закрепить преподавателя:</label>
+                    <select id="course-teacher"></select>
 
-                    <a href="#admin-list" class="submit-btn">Сохранить изменения</a>
+                    <button type="submit" class="submit-btn">Сохранить дисциплину</button>
                     <a href="#admin-list" class="nav-btn">Отмена</a>
                 </form>
-            </div>
-        </section>
-
-        <!-- ADMIN DELETE -->
-        <section id="admin-delete" class="page admin-only" aria-labelledby="admin-delete-title">
-            <div class="container">
-                <h2 id="admin-delete-title">Подтверждение удаления</h2>
-                <p>Вы действительно хотите удалить пользователя <strong>Иван Иванов</strong> (ivan.ivanov@mail.com)?</p>
-                <div class="actions">
-                    <a href="#admin-list" class="action-btn delete-btn">Да, удалить</a>
-                    <a href="#admin-list" class="nav-btn">Отмена</a>
-                </div>
             </div>
         </section>
 

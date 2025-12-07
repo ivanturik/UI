@@ -95,8 +95,7 @@ button,
 .sort-btn,
 .add-btn,
 .submit-btn,
-.action-btn,
-.nav-btn {
+.action-btn {
   cursor: pointer;
   background: #004d00;
   color: #fff;
@@ -114,8 +113,7 @@ button:hover,
 .sort-btn:hover,
 .add-btn:hover,
 .submit-btn:hover,
-.action-btn:hover,
-.nav-btn:hover {
+.action-btn:hover {
   background: #003300;
 }
 
@@ -179,6 +177,12 @@ button:hover,
 /* Кнопку "Выйти" по умолчанию тоже спрячем — JS покажет для залогиненных */
 #logout-btn {
   display: none;
+}
+
+.hint {
+  color: #9ad1ff;
+  font-size: 0.9rem;
+  margin-top: 8px;
 }
 
 
