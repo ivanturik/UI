@@ -10,6 +10,81 @@
     disciplines: 'ais_disciplines',
   };
 
+  class PostList {
+    constructor(items) {
+      this._items = Array.isArray(items) ? items : [];
+    }
+
+    get items() {
+      return this._items;
+    }
+
+    getObjs() {
+      return [...this._items];
+    }
+
+    getObj(id) {
+      return this._items.find((item) => item.id === id) || null;
+    }
+
+    validateObj(obj) {
+      return Boolean(obj && typeof obj.id === 'string');
+    }
+
+    addObj(obj) {
+      if (!this.validateObj(obj)) return false;
+      this._items.push(obj);
+      return true;
+    }
+
+    editObj(id, patch) {
+      const idx = this._items.findIndex((item) => item.id === id);
+      if (idx === -1 || !patch) return false;
+      this._items[idx] = { ...this._items[idx], ...patch };
+      return true;
+    }
+
+    removeObj(id) {
+      const idx = this._items.findIndex((item) => item.id === id);
+      if (idx === -1) return false;
+      this._items.splice(idx, 1);
+      return true;
+    }
+  }
+
+  class View {
+    renderCatalog() {
+      renderCatalog();
+    }
+
+    renderAssignments() {
+      renderAssignments();
+    }
+
+    renderProfile() {
+      renderProfile();
+    }
+
+    renderRoleVisibility() {
+      renderRoleVisibility();
+    }
+
+    renderEnrollForm(prefilledId) {
+      renderEnrollForm(prefilledId);
+    }
+  }
+
+  class Controller {
+    constructor(model, view) {
+      this.model = model;
+      this.view = view;
+    }
+
+    init() {
+      init();
+    }
+  }
+
 const BASE_USERS = [
   {
     id: 'student-1',
@@ -85,7 +160,8 @@ const BASE_DISCIPLINES = [
 
 let disciplines = restoreDisciplines();
 let users = restoreUsers();
-let assignments = restoreAssignments();
+const assignmentsModel = new PostList(restoreAssignments());
+let assignments = assignmentsModel.items;
 let currentUser = restoreCurrentUser();
 let statusFilter = 'Все';
 let assignmentsVisibleCount = 10;
@@ -262,7 +338,11 @@ function restoreDisciplines() {
 }
 
 function saveDisciplines() {
-  localStorage.setItem(STORAGE_KEYS.disciplines, JSON.stringify(disciplines));
+  const prepared = disciplines.map((d) => ({
+    ...d,
+    groups: d.groups.map((g) => ({ id: g.id, name: g.name, teacherId: g.teacherId })),
+  }));
+  localStorage.setItem(STORAGE_KEYS.disciplines, JSON.stringify(prepared));
 }
 
 function restoreUsers() {
@@ -282,6 +362,7 @@ function restoreUsers() {
 
 function saveUsers() {
   localStorage.setItem(STORAGE_KEYS.users, JSON.stringify(users));
+  syncGroupsWithUsers();
 }
 
 function normalizeUsers(list) {
@@ -443,6 +524,7 @@ function renderCatalog() {
   const filterSelect = document.getElementById('discipline-filter');
   if (!list || !filterSelect) return;
 
+  const previousSelection = filterSelect.value;
   filterSelect.innerHTML = '';
   const allOption = document.createElement('option');
   allOption.value = '';
@@ -455,6 +537,13 @@ function renderCatalog() {
     opt.textContent = d.title;
     filterSelect.appendChild(opt);
   });
+
+  if (previousSelection) {
+    filterSelect.value = previousSelection;
+    if (!filterSelect.value) {
+      filterSelect.value = '';
+    }
+  }
 
   const selectedId = filterSelect.value;
   list.innerHTML = '';
@@ -772,8 +861,51 @@ function handleLoginSubmit(event) {
 
 function handleRegisterSubmit(event) {
   event.preventDefault();
-  alert('Полная регистрация в демо недоступна, используйте существующие аккаунты или панель сотрудника.');
-  location.hash = '#login';
+  const login = document.getElementById('reg-login')?.value?.trim();
+  const firstName = document.getElementById('reg-name')?.value?.trim();
+  const lastName = document.getElementById('reg-surname')?.value?.trim();
+  const email = document.getElementById('reg-email')?.value?.trim();
+  const password = document.getElementById('reg-password')?.value?.trim();
+  const role = document.getElementById('reg-role')?.value || 'student';
+  if (!login || !firstName || !lastName || !email || !password) {
+    alert('Заполните все поля регистрации');
+    return;
+  }
+  if (users.some((u) => u.login === login)) {
+    alert('Пользователь с таким логином уже существует');
+    return;
+  }
+  const id = `${role}-${Date.now()}`;
+  const newUser = {
+    id,
+    login,
+    password,
+    role,
+    name: `${firstName} ${lastName}`.trim(),
+    email,
+    groupId: '',
+    completedCourses: 0,
+    completedDisciplineIds: [],
+    bonus: 0,
+    level: 0,
+  };
+  users.push(newUser);
+  saveUsers();
+  syncGroupsWithUsers();
+  currentUser = { id: newUser.id, role: newUser.role, name: newUser.name, email: newUser.email };
+  saveCurrentUser();
+  resetAssignmentsPagination();
+  statusFilter = 'Все';
+  renderRoleVisibility();
+  renderProfile();
+  renderAssignments();
+  renderCatalog();
+  renderEnrollForm();
+  setupAdminFormOptions();
+  setupAddAssignmentOptions();
+  document.getElementById('register-form')?.reset();
+  alert('Регистрация успешна. Вы вошли в систему.');
+  location.hash = '#welcome';
 }
 
 function handleResultFormSubmit(event) {
@@ -838,7 +970,7 @@ function issueAssignmentsForStudent(student, group, discipline) {
   const id = `${student.id}-${group.id}-${Date.now()}-${Math.random()}`;
   const deadline = new Date();
   deadline.setDate(deadline.getDate() + tpl.deadlineDays);
-  assignments.push({
+  assignmentsModel.addObj({
     id,
     title: tpl.title,
     description: tpl.description,
@@ -878,7 +1010,7 @@ function releaseNextTemplateForStudent(studentId, groupId, disciplineId, fromInd
   if (!tpl) return;
   const deadline = new Date();
   deadline.setDate(deadline.getDate() + tpl.deadlineDays);
-  assignments.push({
+  assignmentsModel.addObj({
     id: `${studentId}-${groupId}-${Date.now()}-${Math.random()}`,
     title: tpl.title,
     description: tpl.description,
@@ -1058,7 +1190,7 @@ function handleAssignmentsClick(event) {
 
   if (btn.classList.contains('js-delete')) {
     if (!confirm('Удалить задание безвозвратно?')) return;
-    assignments = assignments.filter((a) => a.id !== assignment.id);
+    assignmentsModel.removeObj(assignment.id);
     saveAssignments();
     if (typeof assignment.templateIndex === 'number') {
       refreshCourseCompletion(assignment.studentId, assignment.disciplineId);
@@ -1096,7 +1228,7 @@ function handleAddAssignmentSubmit(event) {
   const deadline = new Date(deadlineStr);
   getGroupStudentIds(group.id).forEach((studentId) => {
     const id = `${studentId}-${Date.now()}-${Math.random()}`;
-    assignments.push({
+    assignmentsModel.addObj({
       id,
       title,
       description,
@@ -1212,7 +1344,6 @@ function handleAdminCourseSubmit(event) {
         id: groupId,
         name: groupName || 'Группа 1',
         teacherId: teacherId || null,
-        students: [],
       },
     ],
   };
@@ -1370,7 +1501,7 @@ function init() {
 
   const loginForm = document.querySelector('#login form');
   loginForm?.addEventListener('submit', handleLoginSubmit);
-  document.querySelector('#register form')?.addEventListener('submit', handleRegisterSubmit);
+  document.getElementById('register-form')?.addEventListener('submit', handleRegisterSubmit);
   document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
   document.getElementById('enroll-form')?.addEventListener('submit', handleEnrollSubmit);
   document.getElementById('assignments-list')?.addEventListener('click', handleAssignmentsClick);
@@ -1380,6 +1511,10 @@ function init() {
   document.getElementById('admin-course-form')?.addEventListener('submit', handleAdminCourseSubmit);
   document.getElementById('admin-users')?.addEventListener('click', handleAdminListClick);
   document.getElementById('assignments-filters-form')?.addEventListener('submit', handleFilterSubmit);
+  document.getElementById('catalog-filter-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    renderCatalog();
+  });
   document.getElementById('discipline-filter')?.addEventListener('change', renderCatalog);
   document.getElementById('user-search')?.addEventListener('input', renderAdminUsers);
   document.getElementById('role-filter')?.addEventListener('change', renderAdminUsers);
@@ -1415,6 +1550,9 @@ function init() {
   });
 }
 
-window.addEventListener('DOMContentLoaded', init);
+  const appView = new View();
+  const appController = new Controller(assignmentsModel, appView);
+
+  window.addEventListener('DOMContentLoaded', () => appController.init());
 
 })();

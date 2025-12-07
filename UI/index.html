@@ -52,11 +52,11 @@
             <div class="container">
                 <h2 id="home-title">Каталог доступных дисциплин</h2>
                 <p>Выберите интересующую дисциплину для записи.</p>
-                <div class="filters">
+                <form class="filters" id="catalog-filter-form">
                     <label for="discipline-filter">Фильтр по дисциплине:</label>
                     <select id="discipline-filter" aria-label="Фильтр дисциплин"></select>
-                    <button class="filter-btn" aria-label="Поиск по дисциплинам"><i class="fas fa-search"></i> Поиск</button>
-                </div>
+                    <button type="submit" class="filter-btn" aria-label="Поиск по дисциплинам"><i class="fas fa-search"></i> Поиск</button>
+                </form>
 
                 <ul class="list" id="catalog-list" aria-live="polite"></ul>
             </div>
@@ -102,8 +102,9 @@
         <section id="register" class="page" aria-labelledby="register-title">
             <div class="container">
                 <h2 id="register-title">Полная регистрация</h2>
-                <!-- Макет, без JS-логики регистрации -->
-                <form class="form">
+                <form class="form" id="register-form">
+                    <label for="reg-login">Логин:</label>
+                    <input type="text" id="reg-login" required>
                     <label for="reg-name">Имя:</label>
                     <input type="text" id="reg-name" required>
                     <label for="reg-surname">Фамилия:</label>
